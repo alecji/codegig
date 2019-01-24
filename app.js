@@ -3,22 +3,11 @@ const exphbs = require("express-handlebars");
 const bodyParser = require("body-parser");
 const path = require("path");
 
-const Sequelize = require("sequelize");
-const db = new Sequelize("codegig", "root", "root", {
-  host: "localhost",
-  dialect: "mysql",
-  operatorsAliases: false,
+const db = require("./config/database");
 
-  pool: {
-    max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  }
-});
-
+//test db
 db.authenticate()
-  .then(() => console.log("db connected"))
+  .then(() => console.log("db connected..."))
   .catch(err => console.log("error" + err));
 
 const app = express();
@@ -26,6 +15,9 @@ const app = express();
 app.get("/", (req, res) => {
   res.send("Index");
 });
+
+// Gig routes
+app.use("/gigs", require("./routes/gigs"));
 
 const PORT = process.env.PORT || 5000;
 
